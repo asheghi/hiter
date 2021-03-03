@@ -28,7 +28,7 @@ function getRandomString() {
 
 function getTargetUrl() {
     if (target && target.indexOf('*') >= -1) {
-        return target.replace(/\*/, getRandomString());
+        return target.replace(/\*/g, getRandomString());
     }
     return target;
 }
