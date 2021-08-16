@@ -5,9 +5,14 @@
     "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "express-basic-auth": "^1.2.0"
+    "express-basic-auth": "^1.2.0",
+    "get-port": "^5.1.1"
   },
+  "bin": {
+    "stress" : "./bin/index.js"
+  },
+  "main": "./bin/index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js"
   }
 }

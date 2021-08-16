@@ -3,55 +3,58 @@ const bodyParser = require('body-parser');
 const dd = require('./lib/ddos');
 const basicAuth = require('express-basic-auth')
 
+module.exports = ({noAuth = false, username = 'admin', password = 'password'} = {}) => {
+    const app = express();
+    app.use(bodyParser.urlencoded({extended: true}))
+    app.use(bodyParser.json())
 
-const app = express();
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
-
-const auth = basicAuth({
-    users: {'admin': 'supersecret'},
-    challenge: true,
-})
-
-const fs = require('fs');
-const path = require('path');
-
-app.get('/reset', (req, res, next) => {
-    dd.resetState()
-    res.json({msg: 'done'})
-})
-
-app.get('/stats', (req, res, next) => {
-    try {
-        const stats = dd.getStats();
-        res.json({stats})
-    } catch (e) {
-        res.json({msg: e.message})
+    if (!noAuth) {
+        console.log('authentication     ', username,':', password);
+        app.use(basicAuth({
+            users: { [username]: password },
+            challenge: true,
+        }));
     }
-})
 
-app.get('/stop', (req, res, next) => {
-    dd.stop();
-    res.json({msg: 'done'})
-})
+    const fs = require('fs');
+    const path = require('path');
 
-app.post('/start', (req, res, next) => {
-    const {target, method, parallel, payload,} = req.body;
-    dd.setStuff(target, parallel, method, payload);
-    dd.startAttack();
-     res.status(200).send();
-})
+    app.get('/reset', (req, res, next) => {
+        dd.resetState()
+        res.json({msg: 'done'})
+    })
 
-app.get('/', (req, res, next) => {
-    return res.sendFile(path.join(__dirname, "vue.html"));
-})
+    app.get('/stats', (req, res, next) => {
+        try {
+            const stats = dd.getStats();
+            res.json({stats})
+        } catch (e) {
+            res.json({msg: e.message})
+        }
+    })
 
-if (process.env.AUTO_START) {
-    const url = process.env.URL
-    const conn = process.env.CONNECTIONS
-    dd.setStuff(url, conn);
-    dd.startAttack();
+    app.get('/stop', (req, res, next) => {
+        dd.stop();
+        res.json({msg: 'done'})
+    })
+
+    app.post('/start', (req, res, next) => {
+        const {target, method, parallel, payload,} = req.body;
+        dd.setStuff(target, parallel, method, payload);
+        dd.startAttack();
+        res.status(200).send();
+    })
+
+    app.get('/', (req, res, next) => {
+        return res.sendFile(path.join(__dirname, "vue.html"));
+    })
+
+    if (process.env.AUTO_START) {
+        const url = process.env.URL
+        const conn = process.env.CONNECTIONS
+        dd.setStuff(url, conn);
+        dd.startAttack();
+    }
+
+    return app;
 }
-
-
-module.exports = app;
