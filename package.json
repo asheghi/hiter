@@ -14,5 +14,15 @@
   "main": "./bin/index.js",
   "scripts": {
     "start": "node src/server.js"
-  }
+  },
+  "repository": {
+    "url": "https://github.com/semycolon/hiter"
+  },
+  "keywords": [
+    "ddos",
+    "rate",
+    "webattack",
+    "perf","test",
+    "performance test"
+  ]
 }
