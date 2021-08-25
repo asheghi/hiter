@@ -22,7 +22,7 @@ for (let i = 0; i < optionsList.length; i++) {
 
 if (!command || ['--help', '-h', 'help'].includes(command)) {
     console.log(`
-    Usage: fshar COMMAND [arguments]...
+    Usage: hiter COMMAND [arguments]...
     
     Commands:
     web                             start the web server
@@ -33,9 +33,9 @@ if (!command || ['--help', '-h', 'help'].includes(command)) {
        [-password]                  password for authentication
        
     start                           start stress test
-        -target url                 #example https://hostname.xyz/search?q=*
-       [-concurrent 8]              #cuncurrent requests number
-       [-method GET]                #GET or SET          
+        -target url                 example https://hostname.xyz/search?q=*
+       [-concurrent 8]              cuncurrent requests number
+       [-method GET]                GET or SET          
        [-payload {"foo" : "bar"}]   
     `);
 
