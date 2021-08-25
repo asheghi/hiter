@@ -1,8 +1,7 @@
 {
-  "name": "dd.js",
-  "version": "1.0.0",
+  "name": "hiter",
+  "version": "0.0.1",
   "dependencies": {
-    "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
