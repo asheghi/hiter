@@ -1,7 +1,8 @@
 # hiter.js
 ## HTTP(S) benchmark tools
 
-hiter.js is a simple tool to test http/s server performance.
+
+with web and cli interfaces
 
 Usage:
 ```shell
@@ -27,7 +28,11 @@ npx hiter
 
 Example:
 ```shell
-hiter -target https://wpdomain.com/search?q=*
+#take down a mem-cached laravel website  
+hiter -target https://wpdomain.com/search?q=* -concurrent 1024
+
+#start a webserver at 1337 port
+hiter web -port 1337 -host 0.0.0.0 -password s3curePass
 ```
-note: you can use `*` in target url to replace it with random string
+note: you can use `*` in target url to replace it with a random string
 
