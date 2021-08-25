@@ -9,8 +9,9 @@ let target,
     not_hit = 0,
     interval = null,
     last_err = null,
-    down_with_500 = false,
-    startDate
+    code_500 = false,
+    startDate,
+    responseTimes = []
 
 const WAIT_INTERVAL = 300;
 
@@ -35,24 +36,22 @@ function getTargetUrl() {
 
 async function attack() {
     const url = getTargetUrl();
-    console.log('attacking ', url);
     active_calls++;
     const start = new Date();
     axios[method](url)
         .then(res => {
             hit++;
-            try {
-                console.log('hit!', res.status, res.statusText, new Date().getTime() - start.getTime() + ' ms');
-            } catch (err) {
-            }
+            responseTimes.push(new Date().getTime() - start.getTime());
         })
         .catch(err => {
             not_hit++;
-
             try {
-                console.log('didn\'t hit >_<', err.response.status, err.response.statusText, new Date().getTime() - start.getTime() + ' ms');
                 const code = err.response.status;
-                down_with_500 = code && code >= 500 && code < 600;
+                if(code){
+                    if(code >= 500){
+                        code_500++;
+                    }
+                }
                 last_err = err.message;
             } catch (err) {
             }
@@ -60,14 +59,9 @@ async function attack() {
         .finally(() => {
             active_calls--;
         })
-
-    if (hit > parallel || not_hit > parallel) {
-        hit -= hit ? hit - 1 : 0;
-        not_hit = not_hit ? not_hit - 1 : 0;
-    }
 }
 
-const checkWait = function () {
+const shouldWait = function () {
     return active_calls >= parallel
 };
 
@@ -80,7 +74,7 @@ module.exports.setStuff = function (a_target, a_parallel = 4, a_method = "get", 
 };
 
 function mainLoop() {
-    if (!checkWait()) {
+    if (!shouldWait()) {
         for (let i = 0; i < parallel - active_calls; i++) {
             attack();
         }
@@ -107,9 +101,10 @@ module.exports.resetState = function () {
     active_calls = 0;
     hit = 0;
     not_hit = 0;
+    responseTimes = [];
     if (interval) {
         startDate = new Date();
-    }else{
+    } else {
         startDate = null;
     }
 }
@@ -123,7 +118,10 @@ module.exports.getStats = function () {
     return {
         target, method, parallel, payload, active_calls,
         success: hit, failure: not_hit, running: Boolean(interval),
-        down_with_500,
-        response_rate
+        down_with_500: code_500,
+        response_rate,
+        min_response:Math.min(...responseTimes),
+        max_response:Math.max(...responseTimes),
+        avg_response:(responseTimes.reduce((acc,val) => acc + val , 0) / responseTimes.length).toFixed(0),
     };
 }

@@ -57,6 +57,9 @@
             display: block;
             margin:1rem auto;
         }
+        button:hover{
+            cursor:pointer;
+        }
 
         button.success[disabled]{
             background: darkgray;
@@ -129,10 +132,17 @@
             <button class="danger " v-if="running" :disabled="loading" @click="stopAttack">Stop</button>
         </div>
         <div class="stats">
-            <p v-for="(val,key) in stats">
-                <span class="key">{{ formatStat(key) }}</span> : <span class="value"> {{ val }}</span>
-            </p>
-            <button class="success outline sm" v-if="stats" @click="resetStats">Reset Stats</button>
+            <template v-for="(val,key) in stats">
+                <p v-if="val">
+                    <span class="key">{{ formatStat(key) }}</span> : <span class="value"> {{ val }}</span>
+                </p>
+            </template>
+            <button class="success outline sm"
+                    v-if="stats" @click="resetStats"
+                    :disabled="loading"
+            >
+                Reset Stats
+            </button>
         </div>
     </div>
 </div>
