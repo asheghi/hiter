@@ -61,6 +61,9 @@ const commands = {
         }
         lib.setStuff(target, concurrent, method, payload);
         lib.startAttack();
+        setInterval(function () {
+            lib.printStatsInConsole();
+        },60 * 4);
     }
 }
 if (commands[command] && typeof commands[command] === "function") {
