@@ -7,7 +7,7 @@ with web and cli interfaces
 Usage:
 ```shell
 npx hiter
-   Usage: fshar COMMAND [arguments]...
+   Usage: hiter COMMAND [arguments]...
     
     Commands:
     web                             start the web server
