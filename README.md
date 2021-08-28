@@ -1,5 +1,5 @@
 # hiter.js
-## HTTP(S) benchmark tools
+## HTTP(S) benchmark tool
 
 
 with web and cli interfaces
